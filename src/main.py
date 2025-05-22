@@ -1,7 +1,8 @@
 import pygame
 import sys
-from const import *
+from const import WIDTH, HEIGHT
 from game import Game
+
 
 class Main:
     def __init__(self):
@@ -14,15 +15,14 @@ class Main:
         screen = self.screen
         game = self.game
 
-
         while True:
             game.show_bg(screen)
-
-            for event in pygame.event .get():
-                if event.type==pygame.QUIT:
+            game.show_pieces(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
+
             pygame.display.update()
 
 
