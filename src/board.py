@@ -34,7 +34,7 @@ class Board:
         self.squares[row_other][7] = Square(row_other, 7, Rook(color))
 
         # king
-        self.squares[row_other][3] = Square(row_other, 3, King(color))
+        self.squares[row_other][4] = Square(row_other, 3, King(color))
 
         # queen
-        self.squares[row_other][4] = Square(row_other, 4, Queen(color))
+        self.squares[row_other][3] = Square(row_other, 4, Queen(color))
