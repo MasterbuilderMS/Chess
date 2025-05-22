@@ -5,7 +5,9 @@ from piece import Pawn, Knight, Bishop, Rook, King, Queen
 
 class Board:
     def __init__(self):
-        self.squares: list[list] = [[0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)]
+        self.squares: list[list[Square]] = [
+            [0, 0, 0, 0, 0, 0, 0, 0] for col in range(COLS)
+        ]
         self._create()
         self._add_pieces("white")
         self._add_pieces("black")
