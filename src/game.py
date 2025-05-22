@@ -25,7 +25,6 @@ class Game:
             for col in range(COLS):
                 # piece
                 if self.board.squares[row][col].has_piece():
-                    print("has piece")
                     piece = self.board.squares[row][col].piece
                     img = pygame.image.load(piece.texture)
                     img_center = col * SQSIZE + SQSIZE // 2, row * SQSIZE + SQSIZE // 2
