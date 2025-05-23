@@ -1,4 +1,5 @@
 import os
+from move import Move
 
 
 class Piece:
@@ -12,7 +13,7 @@ class Piece:
         self.texture = texture
         self.set_texture()
         self.texture_rect = texture_rect
-        self.moves = []  # valid moves of the piece
+        self.moves: list[Move] = []  # valid moves of the piece
         self.moved = False
 
     def set_texture(self, size=80):

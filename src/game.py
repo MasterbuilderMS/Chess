@@ -2,6 +2,7 @@ import pygame
 from const import ROWS, COLS, SQSIZE
 from board import Board
 from dragger import Dragger
+from piece import Piece
 
 
 class Game:
@@ -39,3 +40,23 @@ class Game:
                         )
                         piece.texture_rect = img.get_rect(center=img_center)
                         surface.blit(img, piece.texture_rect)
+
+    def show_moves(self, surface):
+        if self.dragger.dragging:
+            piece: Piece = self.dragger.piece
+            # loop all values
+            for move in piece.moves:
+                # color
+                color = (
+                    "#C86464"
+                    if (move.final.row + move.final.col) % 2 == 0
+                    else "#C84646"
+                )
+                # create a rect
+                rect = (
+                    move.final.col * SQSIZE,
+                    move.final.row * SQSIZE,
+                    SQSIZE,
+                    SQSIZE,
+                )
+                pygame.draw.rect(surface, color, rect)
