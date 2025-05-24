@@ -3,10 +3,13 @@ from piece import Piece
 
 
 class Square:
+    ALPHACOLS = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H"}
+
     def __init__(self, row, col, piece=None) -> None:
         self.row = row
         self.col = col
         self.piece: Piece = piece
+        self.alphacol = Square.ALPHACOLS[col]
 
     def __eq__(self, other):
         return self.row == other.row and self.col == other.col
@@ -35,3 +38,7 @@ class Square:
                 return False
 
         return True
+
+    @staticmethod
+    def get_alphacol(col):
+        return Square.ALPHACOLS[col]

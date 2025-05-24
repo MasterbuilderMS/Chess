@@ -24,6 +24,8 @@ class Main:
             game.show_last_move(screen)
             game.show_moves(screen)
             game.show_pieces(screen)
+            game.show_hover(screen)
+
             if dragger.dragging:
                 dragger.update_blit(screen)
             for event in pygame.event.get():
@@ -44,9 +46,10 @@ class Main:
                                 board.calc_moves(piece, clicked_row, clicked_col)
                                 dragger.save_initial(event.pos)
                                 dragger.drag_piece(piece)
-                                game.show_moves(screen)
+
                                 game.show_bg(screen)
                                 game.show_last_move(screen)
+                                game.show_moves(screen)
                                 game.show_pieces(screen)
 
                     else:
@@ -57,6 +60,10 @@ class Main:
                         final = Square(released_row, released_col)
                         move = Move(initial, final)
                         if board.valid_move(dragger.piece, move):
+                            captured = board.squares[released_row][
+                                released_col
+                            ].has_piece()
+                            game.sound_effect(captured)
                             board.move(dragger.piece, move)
                             # show methods
                             game.show_bg(screen)
@@ -68,6 +75,11 @@ class Main:
 
                 # mouse motion
                 elif event.type == pygame.MOUSEMOTION:
+                    motion_row = event.pos[1] // SQSIZE
+                    motion_col = event.pos[0] // SQSIZE
+                    print(motion_row, motion_col)
+                    game.set_hover(motion_row, motion_col)
+
                     if dragger.dragging:
                         dragger.update_mouse(event.pos)
                         game.show_bg(screen)
@@ -75,8 +87,16 @@ class Main:
                         game.show_moves(screen)
 
                         game.show_pieces(screen)
+                        game.show_hover(screen)
                         dragger.update_blit(screen)
 
+                # key press:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_t:
+                        game.change_theme()
+
+                    if event.key == pygame.K_r:
+                        game.reset()
                 # quit application
                 if event.type == pygame.QUIT:
                     pygame.quit()
