@@ -3,12 +3,14 @@ from const import ROWS, COLS, SQSIZE
 from board import Board
 from dragger import Dragger
 from piece import Piece
+from itertools import cycle
 
 
 class Game:
     def __init__(self) -> None:
         self.board = Board()
         self.dragger = Dragger()
+        self.current_player = "white"  # white starts
 
     # show methods
 
@@ -60,3 +62,19 @@ class Game:
                     SQSIZE,
                 )
                 pygame.draw.rect(surface, color, rect)
+
+    def show_last_move(self, surface):
+        if self.board.last_move is not None:
+            initial = self.board.last_move.initial
+            final = self.board.last_move.final
+            for pos in [initial, final]:
+                # color
+                color = (
+                    (244, 247, 116) if (pos.row + pos.col) % 2 == 0 else (172, 195, 51)
+                )
+                rect = (pos.col * SQSIZE, pos.row * SQSIZE, SQSIZE, SQSIZE)
+                pygame.draw.rect(surface, color, rect)
+
+    # other methods
+    def next_player(self):
+        self.current_player = "black" if self.current_player == "white" else "white"

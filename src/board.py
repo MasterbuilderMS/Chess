@@ -7,9 +7,26 @@ from move import Move
 class Board:
     def __init__(self):
         self.squares = [[None for _ in range(COLS)] for _ in range(ROWS)]
+        self.last_move = None
         self._create()
         self._add_pieces("white")
         self._add_pieces("black")
+
+    def move(self, piece: Piece, move: Move):
+        initial = move.initial
+        final = move.final
+
+        # update console board
+        self.squares[initial.row][initial.col].piece = None
+        self.squares[final.row][final.col].piece = piece
+
+        piece.moved = True
+        # clear valid moves
+        piece.clear_moves()
+        self.last_move = move
+
+    def valid_move(self, piece: Piece, move):
+        return move in piece.moves
 
     def calc_moves(self, piece: Piece, row, col):
         """
@@ -108,6 +125,28 @@ class Board:
                     possible_move_row = possible_move_row + row_incr
                     possible_move_col = possible_move_col + col_incr
 
+        def king_moves():
+            possible_moves = [
+                (row - 1, col + 0),  # up
+                (row - 1, col + 1),  # up-right
+                (row + 0, col + 1),  # right
+                (row + 1, col + 1),  # down-right
+                (row + 1, col + 0),  # down
+                (row + 1, col - 1),  # down-left
+                (row + 0, col - 1),  # left
+                (row - 1, col - 1),  # up-left
+            ]
+            for move in possible_moves:
+                pos_row, pos_col = move
+                if Square.in_range(pos_row, pos_col):
+                    if self.squares[pos_row][pos_col].isempty_or_enemy(piece.color):
+                        initial = Square(row, col)
+                        final = Square(pos_row, pos_col)
+                        move = Move(initial, final)
+                        piece.add_moves(move)
+
+            # TODO: castling
+
         if isinstance(piece, Pawn):
             pawn_moves()
         elif isinstance(piece, Knight):
@@ -144,7 +183,7 @@ class Board:
                 ]
             )
         elif isinstance(piece, King):
-            pass
+            king_moves()
 
     def _create(self):
         for row in range(ROWS):
